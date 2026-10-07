@@ -18,7 +18,9 @@
  *    shallowCopy({}) => {}
  */
 function shallowCopy(obj) {
-  return Object.assign({}, obj);
+  const copy = {};
+  Object.assign(copy, obj);
+  return copy;
 }
 
 /**
@@ -34,9 +36,9 @@ function shallowCopy(obj) {
  */
 function mergeObjects(objects) {
   return objects.reduce((acc, obj) => {
-    for (const [key, value] of Object.entries(obj)) {
+    Object.entries(obj).forEach(([key, value]) => {
       acc[key] = (acc[key] || 0) + value;
-    }
+    });
     return acc;
   }, {});
 }
@@ -55,10 +57,13 @@ function mergeObjects(objects) {
  *
  */
 function removeProperties(obj, keys) {
-  for (const key of keys) {
-    delete obj[key];
-  }
-  return obj;
+  const newObj = { ...obj };
+
+  keys.forEach((key) => {
+    delete newObj[key];
+  });
+
+  return newObj;
 }
 
 /**
@@ -125,11 +130,11 @@ function makeImmutable(obj) {
 function makeWord(lettersObject) {
   const result = [];
 
-  for (const [letter, positions] of Object.entries(lettersObject)) {
-    for (const position of positions) {
+  Object.entries(lettersObject).forEach(([letter, positions]) => {
+    positions.forEach((position) => {
       result[position] = letter;
-    }
-  }
+    });
+  });
   return result.join('');
 }
 
@@ -307,7 +312,7 @@ function sortCitiesArray(arr) {
 function group(array, keySelector, valueSelector) {
   const map = new Map();
 
-  for (const item of array) {
+  array.forEach((item) => {
     const key = keySelector(item);
     const value = valueSelector(item);
 
@@ -316,7 +321,7 @@ function group(array, keySelector, valueSelector) {
     }
 
     map.get(key).push(value);
-  }
+  });
   return map;
 }
 
